@@ -1,0 +1,40 @@
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env.local
+
+# Laravel
+backend/vendor/
+backend/.env
+backend/storage/logs/*.log
+backend/bootstrap/cache/*.php
+
+# Python / FastAPI
+ml-service/venv/
+ml-service/__pycache__/
+ml-service/**/*.pyc
+ml-service/.env
+
+# Database
+database/backups/*.sql
+
+# Storage files
+storage/complaints/*
+storage/reports/*
+storage/temp/*
+
+# Keep empty folders
+!storage/complaints/.gitkeep
+!storage/reports/.gitkeep
+!storage/temp/.gitkeep
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Environment
+.env
+.env.local
