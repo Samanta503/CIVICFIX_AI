@@ -1,17 +1,19 @@
 export const ROUTES = {
-    home: "/",
-    login: "/login",
-    register: "/register",
+  home: "/",
+  login: "/login",
+  register: "/register",
 
-    publicComplaints: "/complaints/public",
+  systemData: "/system-data",
 
-    citizenDashboard: "/citizen/dashboard",
-    citizenComplaints: "/citizen/complaints",
-    createComplaint: "/citizen/complaints/create",
+  publicComplaints: "/complaints/public",
 
-    officerDashboard: "/officer/dashboard",
-    officerAssignments: "/officer/assigned",
+  citizenDashboard: "/citizen/dashboard",
+  citizenComplaints: "/citizen/complaints",
+  createComplaint: "/citizen/complaints/create",
 
-    departmentDashboard: "/department/dashboard",
-    adminDashboard: "/admin/dashboard",
+  officerDashboard: "/officer/dashboard",
+  officerAssignments: "/officer/assigned",
+
+  departmentDashboard: "/department/dashboard",
+  adminDashboard: "/admin/dashboard",
 };

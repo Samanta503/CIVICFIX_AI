@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\Api\PublicMetaController;
 use App\Http\Controllers\Api\PublicStatusController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/status', [PublicStatusController::class, 'index'])
     ->name('status');
+
+Route::get('/meta', [PublicMetaController::class, 'index'])
+    ->name('meta');
 
 Route::get('/complaints', function () {
     return response()->json([
