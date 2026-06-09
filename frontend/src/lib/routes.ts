@@ -2,6 +2,7 @@ export const ROUTES = {
   home: "/",
   login: "/login",
   register: "/register",
+  unauthorized: "/unauthorized",
 
   systemData: "/system-data",
 
@@ -15,5 +16,6 @@ export const ROUTES = {
   officerAssignments: "/officer/assigned",
 
   departmentDashboard: "/department/dashboard",
+
   adminDashboard: "/admin/dashboard",
 };

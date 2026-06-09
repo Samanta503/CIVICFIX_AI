@@ -2,15 +2,21 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/dashboard', function () {
-    return response()->json([
-        'success' => true,
-        'message' => 'Admin dashboard API placeholder.',
-        'data' => [
-            'total_users' => 0,
-            'total_complaints' => 0,
-            'total_departments' => 0,
-            'ai_enabled' => config('ai.enabled'),
-        ],
-    ]);
-})->name('dashboard');
+Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
+    Route::get('/dashboard', function () {
+        return response()->json([
+            'success' => true,
+            'message' => 'Admin dashboard loaded successfully.',
+            'data' => [
+                'role' => 'super_admin',
+                'title' => 'Super Admin Dashboard',
+                'features' => [
+                    'Manage users',
+                    'Manage departments',
+                    'Manage roles and permissions',
+                    'Monitor full city complaint system',
+                ],
+            ],
+        ]);
+    })->name('dashboard');
+});
