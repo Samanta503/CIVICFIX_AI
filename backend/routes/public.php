@@ -1,27 +1,31 @@
 <?php
 
+use App\Http\Controllers\Api\PublicComplaintController;
 use App\Http\Controllers\Api\PublicMetaController;
-use App\Http\Controllers\Api\PublicStatusController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/status', [PublicStatusController::class, 'index'])
-    ->name('status');
+Route::get('/status', function () {
+    return response()->json([
+        'success' => true,
+        'message' => 'Public APIs are working.',
+        'data' => [
+            'module' => 'CivicFix AI Public Portal',
+            'status' => 'online',
+        ],
+    ]);
+})->name('status');
 
 Route::get('/meta', [PublicMetaController::class, 'index'])
     ->name('meta');
 
-Route::get('/complaints', function () {
-    return response()->json([
-        'success' => true,
-        'message' => 'Public complaint list API will be added later.',
-        'data' => [],
-    ]);
-})->name('complaints.index');
+Route::get('/complaints', [PublicComplaintController::class, 'index'])
+    ->name('complaints.index');
 
-Route::get('/map/complaints', function () {
-    return response()->json([
-        'success' => true,
-        'message' => 'Public complaint map API will be added later.',
-        'data' => [],
-    ]);
-})->name('map.complaints');
+Route::get('/complaints/{complaintNo}', [PublicComplaintController::class, 'show'])
+    ->name('complaints.show');
+
+Route::get('/map/complaints', [PublicComplaintController::class, 'map'])
+    ->name('map.complaints');
+
+Route::get('/complaint-stats', [PublicComplaintController::class, 'stats'])
+    ->name('complaint-stats');
