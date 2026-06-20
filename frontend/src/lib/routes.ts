@@ -19,4 +19,7 @@ export const ROUTES = {
   departmentComplaints: "/department/complaints",
 
   adminDashboard: "/admin/dashboard",
+  adminUsers: "/admin/users",
+  adminDepartments: "/admin/departments",
+  adminCategories: "/admin/categories",
 };

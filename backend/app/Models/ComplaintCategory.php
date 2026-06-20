@@ -14,7 +14,6 @@ class ComplaintCategory extends Model
         'slug',
         'default_priority',
         'default_sla_hours',
-        'status',
     ];
 
     public function department(): BelongsTo
@@ -22,8 +21,8 @@ class ComplaintCategory extends Model
         return $this->belongsTo(Department::class);
     }
 
-    public function slaRules(): HasMany
+    public function complaints(): HasMany
     {
-        return $this->hasMany(SlaRule::class, 'category_id');
+        return $this->hasMany(Complaint::class, 'category_id');
     }
 }

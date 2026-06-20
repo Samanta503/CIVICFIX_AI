@@ -10,10 +10,6 @@ class Department extends Model
     protected $fillable = [
         'name',
         'slug',
-        'description',
-        'contact_email',
-        'phone',
-        'status',
     ];
 
     public function users(): HasMany
@@ -24,5 +20,10 @@ class Department extends Model
     public function categories(): HasMany
     {
         return $this->hasMany(ComplaintCategory::class);
+    }
+
+    public function complaints(): HasMany
+    {
+        return $this->hasMany(Complaint::class);
     }
 }
