@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DepartmentComplaintController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum', 'role:department_admin,super_admin'])->group(function () {
@@ -19,4 +20,17 @@ Route::middleware(['auth:sanctum', 'role:department_admin,super_admin'])->group(
             ],
         ]);
     })->name('dashboard');
+
+    Route::get('/complaints', [DepartmentComplaintController::class, 'index'])
+        ->name('complaints.index');
+
+    Route::get('/complaints/{complaint}', [DepartmentComplaintController::class, 'show'])
+        ->name('complaints.show');
+
+    Route::get('/officers', [DepartmentComplaintController::class, 'officers'])
+        ->name('officers.index');
+
+    Route::put('/complaints/{complaint}/assign', [DepartmentComplaintController::class, 'assign'])
+        ->middleware('throttle:30,1')
+        ->name('complaints.assign');
 });

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -49,6 +50,21 @@ class User extends Authenticatable
     public function zone(): BelongsTo
     {
         return $this->belongsTo(Zone::class);
+    }
+
+    public function complaints(): HasMany
+    {
+        return $this->hasMany(Complaint::class, 'citizen_id');
+    }
+
+    public function assignedComplaints(): HasMany
+    {
+        return $this->hasMany(Complaint::class, 'assigned_officer_id');
+    }
+
+    public function assignedComplaintsByMe(): HasMany
+    {
+        return $this->hasMany(Complaint::class, 'assigned_by');
     }
 
     public function isSuperAdmin(): bool

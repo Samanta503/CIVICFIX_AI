@@ -16,6 +16,7 @@ export const ROUTES = {
   officerAssignments: "/officer/assigned",
 
   departmentDashboard: "/department/dashboard",
+  departmentComplaints: "/department/complaints",
 
   adminDashboard: "/admin/dashboard",
 };
