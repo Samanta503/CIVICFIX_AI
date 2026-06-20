@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Citizen\StoreComplaintRequest;
 use App\Models\Complaint;
 use App\Models\ComplaintCategory;
+use App\Services\ComplaintFormatterService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,19 +15,19 @@ use Illuminate\Support\Str;
 
 class CitizenComplaintController extends Controller
 {
+    public function __construct(
+        private ComplaintFormatterService $formatter
+    ) {
+    }
+
     public function index(Request $request): JsonResponse
     {
         $complaints = Complaint::query()
             ->where('citizen_id', $request->user()->id)
-            ->with([
-                'category:id,name,slug,default_priority,default_sla_hours',
-                'department:id,name,slug',
-                'zone:id,name,city,ward_number',
-                'media:id,complaint_id,file_url,original_name,media_type',
-            ])
+            ->with($this->formatter->relations())
             ->latest()
             ->get()
-            ->map(fn (Complaint $complaint) => $this->formatComplaint($complaint));
+            ->map(fn (Complaint $complaint) => $this->formatter->format($complaint));
 
         return response()->json([
             'success' => true,
@@ -90,19 +91,13 @@ class CitizenComplaintController extends Controller
             return $complaint;
         });
 
-        $complaint->load([
-            'category:id,name,slug,default_priority,default_sla_hours',
-            'department:id,name,slug',
-            'zone:id,name,city,ward_number',
-            'media:id,complaint_id,file_url,original_name,media_type',
-            'statusHistories:id,complaint_id,old_status,new_status,note,created_at',
-        ]);
+        $complaint->load($this->formatter->relations());
 
         return response()->json([
             'success' => true,
             'message' => 'Complaint submitted successfully.',
             'data' => [
-                'complaint' => $this->formatComplaint($complaint),
+                'complaint' => $this->formatter->format($complaint),
             ],
         ], 201);
     }
@@ -112,20 +107,14 @@ class CitizenComplaintController extends Controller
         $complaint = Complaint::query()
             ->where('citizen_id', $request->user()->id)
             ->where('complaint_no', $complaintNo)
-            ->with([
-                'category:id,name,slug,default_priority,default_sla_hours',
-                'department:id,name,slug',
-                'zone:id,name,city,ward_number',
-                'media:id,complaint_id,file_url,original_name,media_type',
-                'statusHistories:id,complaint_id,old_status,new_status,note,created_at',
-            ])
+            ->with($this->formatter->relations())
             ->firstOrFail();
 
         return response()->json([
             'success' => true,
             'message' => 'Complaint details loaded successfully.',
             'data' => [
-                'complaint' => $this->formatComplaint($complaint),
+                'complaint' => $this->formatter->format($complaint),
             ],
         ]);
     }
@@ -137,60 +126,5 @@ class CitizenComplaintController extends Controller
         } while (Complaint::where('complaint_no', $complaintNo)->exists());
 
         return $complaintNo;
-    }
-
-    private function formatComplaint(Complaint $complaint): array
-    {
-        return [
-            'id' => $complaint->id,
-            'complaint_no' => $complaint->complaint_no,
-            'title' => $complaint->title,
-            'description' => $complaint->description,
-            'address' => $complaint->address,
-            'latitude' => $complaint->latitude,
-            'longitude' => $complaint->longitude,
-            'priority' => $complaint->priority,
-            'status' => $complaint->status,
-            'source' => $complaint->source,
-            'submitted_at' => $complaint->submitted_at?->toISOString(),
-            'sla_due_at' => $complaint->sla_due_at?->toISOString(),
-            'resolved_at' => $complaint->resolved_at?->toISOString(),
-
-            'category' => $complaint->category ? [
-                'id' => $complaint->category->id,
-                'name' => $complaint->category->name,
-                'slug' => $complaint->category->slug,
-                'default_priority' => $complaint->category->default_priority,
-                'default_sla_hours' => $complaint->category->default_sla_hours,
-            ] : null,
-
-            'department' => $complaint->department ? [
-                'id' => $complaint->department->id,
-                'name' => $complaint->department->name,
-                'slug' => $complaint->department->slug,
-            ] : null,
-
-            'zone' => $complaint->zone ? [
-                'id' => $complaint->zone->id,
-                'name' => $complaint->zone->name,
-                'city' => $complaint->zone->city,
-                'ward_number' => $complaint->zone->ward_number,
-            ] : null,
-
-            'media' => $complaint->media?->map(fn ($media) => [
-                'id' => $media->id,
-                'media_type' => $media->media_type,
-                'file_url' => $media->file_url,
-                'original_name' => $media->original_name,
-            ])->values() ?? [],
-
-            'status_histories' => $complaint->statusHistories?->map(fn ($history) => [
-                'id' => $history->id,
-                'old_status' => $history->old_status,
-                'new_status' => $history->new_status,
-                'note' => $history->note,
-                'created_at' => $history->created_at?->toISOString(),
-            ])->values() ?? [],
-        ];
     }
 }

@@ -76,6 +76,6 @@ class Complaint extends Model
 
     public function statusHistories(): HasMany
     {
-        return $this->hasMany(ComplaintStatusHistory::class);
+        return $this->hasMany(ComplaintStatusHistory::class)->oldest();
     }
 }

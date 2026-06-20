@@ -43,6 +43,7 @@ export type ComplaintAssignedOfficer = {
   email: string;
   phone: string | null;
   department?: ComplaintDepartmentSummary | null;
+  zone?: ComplaintZoneSummary | null;
 };
 
 export type ComplaintMedia = {
@@ -50,6 +51,9 @@ export type ComplaintMedia = {
   media_type: "image" | "video" | "document";
   file_url: string | null;
   original_name: string | null;
+  mime_type?: string | null;
+  size_bytes?: number | null;
+  created_at?: string | null;
 };
 
 export type ComplaintStatusHistory = {
@@ -72,6 +76,7 @@ export type Complaint = {
   priority: ComplaintPriority;
   status: ComplaintStatus;
   source: string;
+
   submitted_at: string | null;
   sla_due_at: string | null;
   resolved_at: string | null;

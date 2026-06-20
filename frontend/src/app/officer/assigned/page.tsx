@@ -245,6 +245,13 @@ function OfficerComplaintCard({
           <p className="mt-4 text-sm text-slate-500">
             Address: {complaint.address}
           </p>
+
+          <Link
+            href={`${ROUTES.officerAssignments}/${complaint.id}`}
+            className="mt-5 inline-flex rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-secondary hover:bg-slate-100"
+          >
+            View Details
+          </Link>
         </div>
 
         <div className="rounded-2xl bg-slate-50 p-5">

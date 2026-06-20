@@ -139,7 +139,6 @@ function DepartmentComplaintsContent() {
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-slate-50 py-16">
-      {/* Animated background blobs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -left-40 -top-40 h-96 w-96 animate-pulse rounded-full bg-gradient-to-br from-primary/10 to-teal-200/20 blur-3xl" />
         <div className="absolute -bottom-40 -right-40 h-96 w-96 animate-pulse rounded-full bg-gradient-to-tl from-secondary/10 to-indigo-200/20 blur-3xl [animation-delay:2s]" />
@@ -148,18 +147,14 @@ function DepartmentComplaintsContent() {
 
       <Container>
         <div className="relative space-y-6">
-          {/* Page Header */}
           <div className="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white p-8 shadow-xl shadow-slate-200/50 transition-all duration-500 hover:shadow-2xl hover:shadow-slate-200/60">
-            {/* Top accent bar */}
             <div className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-primary via-teal-400 to-secondary" />
 
-            {/* Decorative corner blobs */}
             <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-bl from-primary/10 to-transparent blur-2xl transition-transform duration-700 group-hover:scale-110" />
             <div className="pointer-events-none absolute -bottom-20 -left-20 h-52 w-52 rounded-full bg-gradient-to-tr from-secondary/5 to-transparent blur-2xl transition-transform duration-700 group-hover:scale-110" />
 
             <div className="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
               <div>
-                {/* Badge */}
                 <div className="inline-flex items-center gap-2 rounded-full border border-teal-200 bg-gradient-to-r from-teal-50 to-emerald-50 px-4 py-2 text-sm font-semibold text-primary shadow-sm">
                   <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
                   Department Workflow
@@ -217,7 +212,6 @@ function DepartmentComplaintsContent() {
             </div>
           </div>
 
-          {/* Message banner */}
           {message && (
             <div
               className={`relative overflow-hidden rounded-2xl border p-4 text-sm shadow-sm transition-all duration-300 ${
@@ -269,7 +263,6 @@ function DepartmentComplaintsContent() {
             </div>
           )}
 
-          {/* Empty state */}
           {complaints.length === 0 ? (
             <div className="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white p-16 text-center shadow-xl shadow-slate-200/50 transition-all duration-500 hover:shadow-2xl">
               <div className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-primary via-teal-400 to-secondary" />
@@ -363,18 +356,14 @@ function DepartmentComplaintCard({
       className="group relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300/60 hover:shadow-xl hover:shadow-slate-200/60"
       style={{ animationDelay: `${index * 75}ms` }}
     >
-      {/* Top shine on hover */}
       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary/0 via-primary/50 to-secondary/0 opacity-0 transition-all duration-500 group-hover:opacity-100" />
 
-      {/* Corner decorative blobs */}
       <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-gradient-to-bl from-primary/5 to-transparent blur-2xl transition-transform duration-500 group-hover:scale-150" />
       <div className="pointer-events-none absolute -bottom-12 -left-12 h-36 w-36 rounded-full bg-gradient-to-tr from-secondary/5 to-transparent blur-2xl transition-transform duration-500 group-hover:scale-150" />
 
       <div className="relative p-6 md:p-7">
         <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-          {/* Left — Complaint details */}
           <div>
-            {/* Badges */}
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-gradient-to-r from-slate-50 to-slate-100/60 px-3 py-1 text-xs font-bold text-slate-600 shadow-sm">
                 <svg
@@ -397,17 +386,14 @@ function DepartmentComplaintCard({
               <PriorityBadge priority={complaint.priority} />
             </div>
 
-            {/* Title */}
             <h2 className="mt-4 bg-gradient-to-r from-secondary to-slate-700 bg-clip-text text-xl font-bold text-transparent transition-all duration-500 group-hover:from-primary group-hover:to-teal-700">
               {complaint.title}
             </h2>
 
-            {/* Description */}
             <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">
               {complaint.description}
             </p>
 
-            {/* Meta grid */}
             <div className="mt-5 grid gap-2.5 rounded-2xl border border-slate-100 bg-gradient-to-br from-slate-50/80 to-teal-50/20 p-4 text-sm transition-all duration-300 group-hover:border-teal-100/80 md:grid-cols-2">
               <MetaItem
                 icon={
@@ -493,7 +479,6 @@ function DepartmentComplaintCard({
               />
             </div>
 
-            {/* Address */}
             <div className="mt-4 flex items-start gap-2 rounded-xl border border-slate-100 bg-slate-50/60 px-3 py-2.5 text-sm text-slate-500 transition-colors duration-300 group-hover:border-teal-100/60">
               <svg
                 className="mt-0.5 h-4 w-4 shrink-0 text-primary/60"
@@ -510,11 +495,16 @@ function DepartmentComplaintCard({
               </svg>
               <span className="leading-5">{complaint.address}</span>
             </div>
+
+            <Link
+              href={`${ROUTES.departmentComplaints}/${complaint.id}`}
+              className="mt-5 inline-flex rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-secondary hover:bg-slate-100"
+            >
+              View Details
+            </Link>
           </div>
 
-          {/* Right — Assign Officer Panel */}
           <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-gradient-to-br from-slate-50 to-teal-50/30 p-5 transition-all duration-300 group-hover:border-teal-100">
-            {/* Panel accent */}
             <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-primary via-teal-400 to-secondary opacity-60" />
 
             <div className="pl-3">
@@ -537,7 +527,6 @@ function DepartmentComplaintCard({
                 <h3 className="font-bold text-secondary">Assign Officer</h3>
               </div>
 
-              {/* Officer select */}
               <div className="mt-4 group/input">
                 <label className="mb-2 block text-sm font-semibold text-secondary">
                   Officer
@@ -566,8 +555,7 @@ function DepartmentComplaintCard({
                     <option value="">Select officer</option>
                     {officers.map((officer) => (
                       <option key={officer.id} value={officer.id}>
-                        {officer.name} —{" "}
-                        {officer.department?.name || "N/A"}
+                        {officer.name} — {officer.department?.name || "N/A"}
                       </option>
                     ))}
                   </select>
@@ -589,7 +577,6 @@ function DepartmentComplaintCard({
                 </div>
               </div>
 
-              {/* Note textarea */}
               <div className="mt-4 group/input">
                 <label className="mb-2 block text-sm font-semibold text-secondary">
                   Note
@@ -620,7 +607,6 @@ function DepartmentComplaintCard({
                 </div>
               </div>
 
-              {/* Assign Button */}
               <button
                 type="button"
                 disabled={assigning}

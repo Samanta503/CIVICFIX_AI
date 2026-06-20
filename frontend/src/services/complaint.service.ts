@@ -82,6 +82,20 @@ export async function getDepartmentComplaints(): Promise<ComplaintListResponse> 
   return parseResponse<ComplaintListResponse>(response);
 }
 
+export async function getDepartmentComplaint(
+  complaintId: number
+): Promise<ComplaintSingleResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/department/complaints/${complaintId}`,
+    {
+      method: "GET",
+      headers: getAuthHeaders(),
+    }
+  );
+
+  return parseResponse<ComplaintSingleResponse>(response);
+}
+
 export async function getDepartmentOfficers(): Promise<OfficerListResponse> {
   const response = await fetch(`${API_BASE_URL}/department/officers`, {
     method: "GET",
@@ -122,6 +136,20 @@ export async function getOfficerAssignedComplaints(): Promise<ComplaintListRespo
   });
 
   return parseResponse<ComplaintListResponse>(response);
+}
+
+export async function getOfficerAssignedComplaint(
+  complaintId: number
+): Promise<ComplaintSingleResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/officer/assigned-complaints/${complaintId}`,
+    {
+      method: "GET",
+      headers: getAuthHeaders(),
+    }
+  );
+
+  return parseResponse<ComplaintSingleResponse>(response);
 }
 
 export async function updateOfficerComplaintStatus({
