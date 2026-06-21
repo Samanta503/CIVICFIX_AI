@@ -31,7 +31,9 @@ function AdminDashboardContent() {
         setData(response.data);
       } catch (error) {
         setMessage(
-          error instanceof Error ? error.message : "Could not load admin dashboard."
+          error instanceof Error
+            ? error.message
+            : "Could not load admin dashboard."
         );
       } finally {
         setLoading(false);
@@ -59,7 +61,7 @@ function AdminDashboardContent() {
 
           <p className="mt-3 max-w-2xl text-slate-600">
             Manage users, departments, categories, complaints, officer workload,
-            and full CivicFix AI operations.
+            SLA alerts, and full CivicFix AI operations.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-4">
@@ -68,6 +70,13 @@ function AdminDashboardContent() {
               className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white hover:bg-teal-800"
             >
               Monitor Complaints
+            </Link>
+
+            <Link
+              href={ROUTES.adminSlaAlerts}
+              className="rounded-xl border border-red-200 bg-red-50 px-5 py-3 text-sm font-bold text-red-700 hover:bg-red-100"
+            >
+              SLA Alerts
             </Link>
 
             <Link

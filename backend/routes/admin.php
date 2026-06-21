@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AdminDashboardController;
 use App\Http\Controllers\Api\AdminDepartmentController;
 use App\Http\Controllers\Api\AdminMetaController;
 use App\Http\Controllers\Api\AdminOfficerController;
+use App\Http\Controllers\Api\AdminSlaController;
 use App\Http\Controllers\Api\AdminUserController;
 use App\Http\Controllers\Api\AdminWorkloadController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,21 @@ Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
 
     Route::get('/workload', [AdminWorkloadController::class, 'index'])
         ->name('workload.index');
+
+    Route::get('/sla-alerts', [AdminSlaController::class, 'index'])
+        ->name('sla-alerts.index');
+
+    Route::post('/sla-alerts/run-check', [AdminSlaController::class, 'runCheck'])
+        ->middleware('throttle:20,1')
+        ->name('sla-alerts.run-check');
+
+    Route::post('/sla-alerts/complaints/{complaint}/escalate', [AdminSlaController::class, 'escalate'])
+        ->middleware('throttle:30,1')
+        ->name('sla-alerts.escalate');
+
+    Route::put('/sla-alerts/escalations/{escalation}/resolve', [AdminSlaController::class, 'resolve'])
+        ->middleware('throttle:30,1')
+        ->name('sla-alerts.resolve');
 
     Route::get('/officers', [AdminOfficerController::class, 'index'])
         ->name('officers.index');

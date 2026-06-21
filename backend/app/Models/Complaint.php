@@ -78,4 +78,9 @@ class Complaint extends Model
     {
         return $this->hasMany(ComplaintStatusHistory::class)->oldest();
     }
+
+    public function slaEscalations(): HasMany
+    {
+        return $this->hasMany(SlaEscalation::class);
+    }
 }

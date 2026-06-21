@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\DepartmentComplaintController;
+use App\Http\Controllers\Api\DepartmentSlaController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum', 'role:department_admin,super_admin'])->group(function () {
@@ -33,4 +34,15 @@ Route::middleware(['auth:sanctum', 'role:department_admin,super_admin'])->group(
     Route::put('/complaints/{complaint}/assign', [DepartmentComplaintController::class, 'assign'])
         ->middleware('throttle:30,1')
         ->name('complaints.assign');
+
+    Route::get('/sla-alerts', [DepartmentSlaController::class, 'index'])
+        ->name('sla-alerts.index');
+
+    Route::post('/sla-alerts/complaints/{complaint}/escalate', [DepartmentSlaController::class, 'escalate'])
+        ->middleware('throttle:30,1')
+        ->name('sla-alerts.escalate');
+
+    Route::put('/sla-alerts/escalations/{escalation}/resolve', [DepartmentSlaController::class, 'resolve'])
+        ->middleware('throttle:30,1')
+        ->name('sla-alerts.resolve');
 });

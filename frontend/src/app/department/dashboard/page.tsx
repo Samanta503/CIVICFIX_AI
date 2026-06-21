@@ -30,8 +30,8 @@ function DepartmentDashboardContent() {
           </h1>
 
           <p className="mt-3 max-w-2xl text-slate-600">
-            Review submitted complaints, assign them to officers, and monitor
-            workflow progress.
+            Review submitted complaints, assign them to officers, monitor SLA
+            alerts, and track workflow progress.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-4">
@@ -40,6 +40,13 @@ function DepartmentDashboardContent() {
               className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white hover:bg-teal-800"
             >
               Manage Department Complaints
+            </Link>
+
+            <Link
+              href={ROUTES.departmentSlaAlerts}
+              className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-3 text-sm font-bold text-amber-700 hover:bg-amber-100"
+            >
+              SLA Alerts
             </Link>
           </div>
         </div>
