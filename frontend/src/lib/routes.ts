@@ -22,4 +22,6 @@ export const ROUTES = {
   adminUsers: "/admin/users",
   adminDepartments: "/admin/departments",
   adminCategories: "/admin/categories",
+  adminComplaints: "/admin/complaints",
+  adminWorkload: "/admin/workload",
 };

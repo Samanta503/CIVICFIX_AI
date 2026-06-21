@@ -42,16 +42,7 @@ function AdminDashboardContent() {
   }, []);
 
   if (loading) {
-    return (
-      <section className="flex min-h-screen items-center justify-center bg-slate-50">
-        <div className="text-center">
-          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-teal-200 border-t-primary" />
-          <p className="mt-4 text-sm font-medium text-slate-600">
-            Loading admin dashboard...
-          </p>
-        </div>
-      </section>
-    );
+    return <LoadingState message="Loading admin dashboard..." />;
   }
 
   return (
@@ -67,14 +58,28 @@ function AdminDashboardContent() {
           </h1>
 
           <p className="mt-3 max-w-2xl text-slate-600">
-            Manage users, departments, categories, and monitor the full CivicFix
-            AI complaint system.
+            Manage users, departments, categories, complaints, officer workload,
+            and full CivicFix AI operations.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-4">
             <Link
-              href={ROUTES.adminUsers}
+              href={ROUTES.adminComplaints}
               className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white hover:bg-teal-800"
+            >
+              Monitor Complaints
+            </Link>
+
+            <Link
+              href={ROUTES.adminWorkload}
+              className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-secondary hover:bg-slate-100"
+            >
+              Workload Analytics
+            </Link>
+
+            <Link
+              href={ROUTES.adminUsers}
+              className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-secondary hover:bg-slate-100"
             >
               Manage Users
             </Link>
@@ -119,9 +124,18 @@ function AdminDashboardContent() {
             </div>
 
             <div className="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-              <h2 className="text-2xl font-bold text-secondary">
-                Recent Complaints
-              </h2>
+              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <h2 className="text-2xl font-bold text-secondary">
+                  Recent Complaints
+                </h2>
+
+                <Link
+                  href={ROUTES.adminComplaints}
+                  className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white hover:bg-teal-800"
+                >
+                  View All Complaints
+                </Link>
+              </div>
 
               <div className="mt-5 grid gap-4">
                 {data.recent_complaints.length === 0 ? (
@@ -130,20 +144,23 @@ function AdminDashboardContent() {
                   </p>
                 ) : (
                   data.recent_complaints.map((complaint) => (
-                    <div
+                    <Link
                       key={complaint.id}
-                      className="rounded-2xl border border-slate-100 bg-slate-50 p-4"
+                      href={`${ROUTES.adminComplaints}/${complaint.id}`}
+                      className="block rounded-2xl border border-slate-100 bg-slate-50 p-4 hover:bg-slate-100"
                     >
                       <p className="text-xs font-bold text-primary">
                         {complaint.complaint_no}
                       </p>
+
                       <h3 className="mt-1 font-bold text-secondary">
                         {complaint.title}
                       </h3>
+
                       <p className="mt-1 text-sm text-slate-600">
                         {complaint.department || "N/A"} • {complaint.status}
                       </p>
-                    </div>
+                    </Link>
                   ))
                 )}
               </div>
@@ -161,5 +178,16 @@ function StatCard({ label, value }: { label: string; value: number }) {
       <p className="text-sm font-semibold text-slate-500">{label}</p>
       <p className="mt-2 text-3xl font-extrabold text-secondary">{value}</p>
     </div>
+  );
+}
+
+function LoadingState({ message }: { message: string }) {
+  return (
+    <section className="flex min-h-screen items-center justify-center bg-slate-50">
+      <div className="text-center">
+        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-teal-200 border-t-primary" />
+        <p className="mt-4 text-sm font-medium text-slate-600">{message}</p>
+      </div>
+    </section>
   );
 }
