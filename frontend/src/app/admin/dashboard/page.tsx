@@ -106,6 +106,13 @@ function AdminDashboardContent() {
             >
               Manage Categories
             </Link>
+
+            <Link
+              href={ROUTES.adminNotifications}
+              className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-secondary hover:bg-slate-100"
+            >
+              Notifications
+            </Link>
           </div>
         </div>
 

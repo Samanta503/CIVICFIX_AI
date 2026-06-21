@@ -10,15 +10,34 @@ Route::get('/health', [HealthController::class, 'index'])
 Route::get('/app-info', [AppInfoController::class, 'index'])
     ->name('api.app-info');
 
-Route::prefix('auth')->name('api.auth.')->group(base_path('routes/auth.php'));
+Route::prefix('auth')
+    ->name('api.auth.')
+    ->group(base_path('routes/auth.php'));
 
-Route::prefix('public')->name('api.public.')->group(base_path('routes/public.php'));
+Route::prefix('public')
+    ->name('api.public.')
+    ->group(base_path('routes/public.php'));
+
+Route::prefix('notifications')
+    ->name('api.notifications.')
+    ->group(base_path('routes/notifications.php'));
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::prefix('citizen')->name('api.citizen.')->group(base_path('routes/citizen.php'));
-    Route::prefix('officer')->name('api.officer.')->group(base_path('routes/officer.php'));
-    Route::prefix('department')->name('api.department.')->group(base_path('routes/department.php'));
-    Route::prefix('admin')->name('api.admin.')->group(base_path('routes/admin.php'));
+    Route::prefix('citizen')
+        ->name('api.citizen.')
+        ->group(base_path('routes/citizen.php'));
+
+    Route::prefix('officer')
+        ->name('api.officer.')
+        ->group(base_path('routes/officer.php'));
+
+    Route::prefix('department')
+        ->name('api.department.')
+        ->group(base_path('routes/department.php'));
+
+    Route::prefix('admin')
+        ->name('api.admin.')
+        ->group(base_path('routes/admin.php'));
 });
 
 Route::fallback(function () {

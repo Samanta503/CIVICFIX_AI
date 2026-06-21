@@ -5,11 +5,17 @@ namespace App\Services;
 use App\Models\Complaint;
 use App\Models\SlaEscalation;
 use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 class SlaEscalationService
 {
+    public function __construct(
+        private NotificationService $notificationService
+    ) {
+    }
+
     public function alertQuery(): Builder
     {
         return Complaint::query()
@@ -121,6 +127,12 @@ class SlaEscalationService
                 'new_status' => $complaint->fresh()->status,
                 'note' => $note ?: "Complaint escalated to level {$newLevel}.",
             ]);
+
+            $this->notificationService->notifySlaEscalated(
+                complaint: $complaint->fresh(),
+                escalation: $escalation,
+                actor: $actor
+            );
 
             return $escalation;
         });

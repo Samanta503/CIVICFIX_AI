@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AdminComplaintController;
 use App\Http\Controllers\Api\AdminDashboardController;
 use App\Http\Controllers\Api\AdminDepartmentController;
 use App\Http\Controllers\Api\AdminMetaController;
+use App\Http\Controllers\Api\AdminNotificationController;
 use App\Http\Controllers\Api\AdminOfficerController;
 use App\Http\Controllers\Api\AdminSlaController;
 use App\Http\Controllers\Api\AdminUserController;
@@ -20,6 +21,13 @@ Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
 
     Route::get('/workload', [AdminWorkloadController::class, 'index'])
         ->name('workload.index');
+
+    Route::get('/notifications', [AdminNotificationController::class, 'index'])
+        ->name('notifications.index');
+
+    Route::post('/notifications/send', [AdminNotificationController::class, 'sendToUser'])
+        ->middleware('throttle:30,1')
+        ->name('notifications.send');
 
     Route::get('/sla-alerts', [AdminSlaController::class, 'index'])
         ->name('sla-alerts.index');

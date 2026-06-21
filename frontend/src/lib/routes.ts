@@ -7,6 +7,7 @@ export const ROUTES = {
   systemData: "/system-data",
 
   publicComplaints: "/complaints/public",
+  notifications: "/notifications",
 
   citizenDashboard: "/citizen/dashboard",
   citizenComplaints: "/citizen/complaints",
@@ -26,4 +27,6 @@ export const ROUTES = {
   adminComplaints: "/admin/complaints",
   adminWorkload: "/admin/workload",
   adminSlaAlerts: "/admin/sla-alerts",
+  adminNotifications: "/admin/notifications",
+
 };

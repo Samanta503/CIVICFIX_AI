@@ -16,16 +16,21 @@ class AssignComplaintRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'officer_id' => ['required', 'integer', 'exists:users,id'],
+            'assigned_officer_id' => ['nullable', 'integer', 'exists:users,id'],
+            'officer_id' => ['nullable', 'integer', 'exists:users,id'],
             'note' => ['nullable', 'string', 'max:1000'],
         ];
     }
 
-    public function messages(): array
+    public function withValidator($validator): void
     {
-        return [
-            'officer_id.required' => 'Please select an officer.',
-            'officer_id.exists' => 'Selected officer was not found.',
-        ];
+        $validator->after(function ($validator) {
+            if (!$this->input('assigned_officer_id') && !$this->input('officer_id')) {
+                $validator->errors()->add(
+                    'assigned_officer_id',
+                    'Please select an officer.'
+                );
+            }
+        });
     }
 }

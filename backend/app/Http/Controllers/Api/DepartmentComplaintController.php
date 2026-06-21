@@ -8,7 +8,6 @@ use App\Models\Complaint;
 use App\Models\User;
 use App\Services\ComplaintFormatterService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DepartmentComplaintController extends Controller
@@ -18,16 +17,10 @@ class DepartmentComplaintController extends Controller
     ) {
     }
 
-    public function index(Request $request): JsonResponse
+    public function index(): JsonResponse
     {
-        $user = $request->user();
-        $role = $user->role?->slug;
-
         $complaints = Complaint::query()
             ->with($this->formatter->relations())
-            ->when($role === 'department_admin', function ($query) use ($user) {
-                $query->where('department_id', $user->department_id);
-            })
             ->latest()
             ->get()
             ->map(fn (Complaint $complaint) => $this->formatter->format($complaint));
@@ -41,10 +34,8 @@ class DepartmentComplaintController extends Controller
         ]);
     }
 
-    public function show(Request $request, Complaint $complaint): JsonResponse
+    public function show(Complaint $complaint): JsonResponse
     {
-        $this->authorizeDepartmentAccess($request, $complaint);
-
         $complaint->load($this->formatter->relations());
 
         return response()->json([
@@ -56,20 +47,17 @@ class DepartmentComplaintController extends Controller
         ]);
     }
 
-    public function officers(Request $request): JsonResponse
+    public function officers(): JsonResponse
     {
-        $user = $request->user();
-        $role = $user->role?->slug;
-
         $officers = User::query()
             ->where('status', 'active')
             ->whereHas('role', function ($query) {
                 $query->where('slug', 'officer');
             })
-            ->when($role === 'department_admin', function ($query) use ($user) {
-                $query->where('department_id', $user->department_id);
-            })
-            ->with(['department:id,name,slug', 'zone:id,name,city,ward_number'])
+            ->with([
+                'department:id,name,slug',
+                'zone:id,name,city,ward_number',
+            ])
             ->orderBy('name')
             ->get()
             ->map(fn (User $officer) => [
@@ -77,6 +65,7 @@ class DepartmentComplaintController extends Controller
                 'name' => $officer->name,
                 'email' => $officer->email,
                 'phone' => $officer->phone,
+                'status' => $officer->status,
                 'department' => $officer->department ? [
                     'id' => $officer->department->id,
                     'name' => $officer->department->name,
@@ -92,7 +81,7 @@ class DepartmentComplaintController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Department officers loaded successfully.',
+            'message' => 'Officers loaded successfully.',
             'data' => [
                 'officers' => $officers,
             ],
@@ -101,10 +90,22 @@ class DepartmentComplaintController extends Controller
 
     public function assign(AssignComplaintRequest $request, Complaint $complaint): JsonResponse
     {
-        $this->authorizeDepartmentAccess($request, $complaint);
+        $validated = $request->validated();
+
+        $officerId = $validated['assigned_officer_id']
+            ?? $validated['officer_id']
+            ?? $request->input('assigned_officer_id')
+            ?? $request->input('officer_id');
+
+        if (!$officerId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please select an officer.',
+            ], 422);
+        }
 
         $officer = User::query()
-            ->where('id', $request->integer('officer_id'))
+            ->where('id', $officerId)
             ->where('status', 'active')
             ->whereHas('role', function ($query) {
                 $query->where('slug', 'officer');
@@ -118,16 +119,9 @@ class DepartmentComplaintController extends Controller
             ], 422);
         }
 
-        if ((int) $officer->department_id !== (int) $complaint->department_id) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Officer must belong to the same department as the complaint.',
-            ], 422);
-        }
+        DB::transaction(function () use ($request, $complaint, $officer, $validated) {
+            $oldStatus = $complaint->status;
 
-        $oldStatus = $complaint->status;
-
-        DB::transaction(function () use ($request, $complaint, $officer, $oldStatus) {
             $complaint->update([
                 'assigned_officer_id' => $officer->id,
                 'assigned_by' => $request->user()->id,
@@ -139,7 +133,7 @@ class DepartmentComplaintController extends Controller
                 'changed_by' => $request->user()->id,
                 'old_status' => $oldStatus,
                 'new_status' => 'assigned',
-                'note' => $request->input('note') ?: "Complaint assigned to {$officer->name}.",
+                'note' => $validated['note'] ?? "Complaint assigned to {$officer->name}.",
             ]);
         });
 
@@ -147,29 +141,10 @@ class DepartmentComplaintController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Complaint assigned to officer successfully.',
+            'message' => 'Complaint assigned successfully.',
             'data' => [
                 'complaint' => $this->formatter->format($complaint),
             ],
         ]);
-    }
-
-    private function authorizeDepartmentAccess(Request $request, Complaint $complaint): void
-    {
-        $user = $request->user();
-        $role = $user->role?->slug;
-
-        if ($role === 'super_admin') {
-            return;
-        }
-
-        if ($role === 'department_admin' && (int) $complaint->department_id === (int) $user->department_id) {
-            return;
-        }
-
-        abort(response()->json([
-            'success' => false,
-            'message' => 'You do not have access to this department complaint.',
-        ], 403));
     }
 }

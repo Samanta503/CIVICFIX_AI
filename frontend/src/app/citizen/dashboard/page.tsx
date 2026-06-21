@@ -96,6 +96,13 @@ function CitizenDashboardContent() {
                     </svg>
                     View My Complaints
                   </Link>
+
+                  <Link
+                     href={ROUTES.notifications}
+                     className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-secondary hover:bg-slate-100"
+                   >
+                    My Notifications
+                  </Link>
                 </div>
               </div>
 
