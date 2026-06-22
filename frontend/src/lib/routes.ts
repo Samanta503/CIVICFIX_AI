@@ -28,5 +28,5 @@ export const ROUTES = {
   adminWorkload: "/admin/workload",
   adminSlaAlerts: "/admin/sla-alerts",
   adminNotifications: "/admin/notifications",
-
+  
 };

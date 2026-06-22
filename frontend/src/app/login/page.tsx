@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Container } from "@/components/common/Container";
-import { saveAuth } from "@/lib/auth-storage";
+import { saveAuthData } from "@/lib/auth-storage";
 import { getDashboardRoute } from "@/lib/role-redirect";
 import { ROUTES } from "@/lib/routes";
 import { login } from "@/services/auth.service";
@@ -61,7 +61,7 @@ export default function LoginPage() {
         password,
       });
 
-      saveAuth(response.data.token, response.data.user);
+      saveAuthData(response.data.token, response.data.user);
 
       const dashboardRoute = getDashboardRoute(response.data.user.role?.slug);
 

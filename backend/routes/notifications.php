@@ -7,6 +7,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [UserNotificationController::class, 'index'])
         ->name('index');
 
+    Route::get('/latest', [UserNotificationController::class, 'latest'])
+        ->name('latest');
+
     Route::get('/unread-count', [UserNotificationController::class, 'unreadCount'])
         ->name('unread-count');
 

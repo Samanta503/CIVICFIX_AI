@@ -33,6 +33,44 @@ class UserNotificationController extends Controller
         ]);
     }
 
+    public function latest(Request $request): JsonResponse
+    {
+        $limit = (int) $request->input('limit', 5);
+
+        if ($limit < 1) {
+            $limit = 5;
+        }
+
+        if ($limit > 10) {
+            $limit = 10;
+        }
+
+        $notifications = NotificationLog::query()
+            ->where('user_id', $request->user()->id)
+            ->with([
+                'sender:id,name,email',
+                'complaint:id,complaint_no,title,status,priority',
+            ])
+            ->latest()
+            ->limit($limit)
+            ->get()
+            ->map(fn (NotificationLog $notification) => $this->formatNotification($notification));
+
+        $unreadCount = NotificationLog::query()
+            ->where('user_id', $request->user()->id)
+            ->whereNull('read_at')
+            ->count();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Latest notifications loaded successfully.',
+            'data' => [
+                'unread_count' => $unreadCount,
+                'notifications' => $notifications,
+            ],
+        ]);
+    }
+
     public function unreadCount(Request $request): JsonResponse
     {
         $count = NotificationLog::query()

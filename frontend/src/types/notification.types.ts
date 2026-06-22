@@ -41,6 +41,15 @@ export type NotificationListResponse = {
   };
 };
 
+export type LatestNotificationResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    unread_count: number;
+    notifications: NotificationLog[];
+  };
+};
+
 export type NotificationUnreadCountResponse = {
   success: boolean;
   message: string;

@@ -1,50 +1,72 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Container } from "@/components/common/Container";
-import { clearAuth, getAuthUser } from "@/lib/auth-storage";
-import { getDashboardRoute } from "@/lib/role-redirect";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
+import {
+  AUTH_CHANGED_EVENT,
+  clearAuthData,
+  getAuthToken,
+  getAuthUser,
+} from "@/lib/auth-storage";
 import { ROUTES } from "@/lib/routes";
-import { logout } from "@/services/auth.service";
-import type { AuthUser } from "@/types/auth.types";
+
+type NavbarUser = {
+  id?: number;
+  name?: string;
+  email?: string;
+  role?: {
+    id?: number;
+    name?: string;
+    slug?: string;
+  } | null;
+};
 
 export function Navbar() {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [user, setUser] = useState<NavbarUser | null>(null);
+
+  function loadAuthState() {
+    const token = getAuthToken();
+    const authUser = getAuthUser() as NavbarUser | null;
+
+    setLoggedIn(Boolean(token));
+    setUser(authUser);
+  }
 
   useEffect(() => {
-    setUser(getAuthUser());
+    loadAuthState();
+
+    window.addEventListener(AUTH_CHANGED_EVENT, loadAuthState);
+    window.addEventListener("storage", loadAuthState);
+    window.addEventListener("focus", loadAuthState);
+
+    return () => {
+      window.removeEventListener(AUTH_CHANGED_EVENT, loadAuthState);
+      window.removeEventListener("storage", loadAuthState);
+      window.removeEventListener("focus", loadAuthState);
+    };
   }, []);
 
-  async function handleLogout() {
-    try {
-      await logout();
-    } catch {
-      // Ignore backend logout error and clear local session anyway.
-    } finally {
-      clearAuth();
-      setUser(null);
-      window.location.href = ROUTES.login;
-    }
+  function handleLogout() {
+    clearAuthData();
+    window.location.href = ROUTES.login;
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
-      <Container className="flex h-16 items-center justify-between">
+    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link href={ROUTES.home} className="flex items-center gap-3">
-          <Image
-            src="/logo.svg"
-            alt="CivicFix AI Logo"
-            width={40}
-            height={40}
-            priority
-            className="h-10 w-10 object-contain"
-          />
-          <span className="text-xl font-bold text-secondary">CivicFix AI</span>
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white">
+            <span className="text-lg font-black">✓</span>
+          </div>
+
+          <span className="text-xl font-extrabold text-secondary">
+            CivicFix AI
+          </span>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <div className="flex items-center gap-5">
           <Link
             href="/#features"
             className="text-sm font-medium text-slate-600 hover:text-primary"
@@ -73,10 +95,12 @@ export function Navbar() {
             System Data
           </Link>
 
-          {user ? (
+          {loggedIn ? (
             <>
+              <NotificationBell />
+
               <Link
-                href={getDashboardRoute(user.role?.slug)}
+                href={getDashboardRoute(user)}
                 className="text-sm font-medium text-slate-600 hover:text-primary"
               >
                 Dashboard
@@ -85,7 +109,7 @@ export function Navbar() {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
+                className="rounded-xl bg-red-600 px-5 py-3 text-sm font-bold text-white hover:bg-red-700"
               >
                 Logout
               </button>
@@ -101,14 +125,32 @@ export function Navbar() {
 
               <Link
                 href={ROUTES.register}
-                className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-teal-800"
+                className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white hover:bg-teal-800"
               >
                 Register
               </Link>
             </>
           )}
-        </nav>
-      </Container>
+        </div>
+      </nav>
     </header>
   );
+}
+
+function getDashboardRoute(user: NavbarUser | null): string {
+  const role = user?.role?.slug;
+
+  if (role === "super_admin") {
+    return ROUTES.adminDashboard;
+  }
+
+  if (role === "department_admin") {
+    return ROUTES.departmentDashboard;
+  }
+
+  if (role === "officer") {
+    return ROUTES.officerDashboard;
+  }
+
+  return ROUTES.citizenDashboard;
 }

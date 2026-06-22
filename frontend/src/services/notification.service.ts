@@ -1,5 +1,6 @@
 import { getAuthToken } from "@/lib/auth-storage";
 import type {
+  LatestNotificationResponse,
   NotificationListResponse,
   NotificationUnreadCountResponse,
   SendAdminNotificationPayload,
@@ -43,6 +44,20 @@ export async function getMyNotifications(
   });
 
   return parseResponse<NotificationListResponse>(response);
+}
+
+export async function getLatestNotifications(
+  limit = 5
+): Promise<LatestNotificationResponse> {
+  const response = await fetch(
+    `${API_BASE_URL}/notifications/latest?limit=${limit}`,
+    {
+      method: "GET",
+      headers: getJsonAuthHeaders(),
+    }
+  );
+
+  return parseResponse<LatestNotificationResponse>(response);
 }
 
 export async function getNotificationUnreadCount(): Promise<NotificationUnreadCountResponse> {
