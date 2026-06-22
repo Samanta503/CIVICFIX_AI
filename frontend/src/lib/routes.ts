@@ -7,6 +7,7 @@ export const ROUTES = {
   systemData: "/system-data",
 
   publicComplaints: "/complaints/public",
+  trackComplaint: "/track-complaint",
   notifications: "/notifications",
 
   citizenDashboard: "/citizen/dashboard",
