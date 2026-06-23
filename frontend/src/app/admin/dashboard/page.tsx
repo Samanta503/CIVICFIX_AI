@@ -113,6 +113,20 @@ function AdminDashboardContent() {
             >
               Notifications
             </Link>
+
+            <Link
+              href={ROUTES.adminAiClassifier}
+              className="rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white hover:bg-teal-800"
+            >
+              AI Complaint Classifier
+            </Link>
+
+           <Link
+              href={ROUTES.adminFeedback}
+              className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-secondary hover:bg-slate-100"
+           >
+              Feedback Analytics
+           </Link>
           </div>
         </div>
 

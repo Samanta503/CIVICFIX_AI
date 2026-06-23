@@ -103,6 +103,12 @@ function CitizenDashboardContent() {
                    >
                     My Notifications
                   </Link>
+                  <Link
+                     href={ROUTES.citizenFeedback}
+                     className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-secondary hover:bg-slate-100"
+                 >
+                    Give Feedback
+                  </Link>
                 </div>
               </div>
 

@@ -23,6 +23,10 @@ Route::prefix('notifications')
     ->group(base_path('routes/notifications.php'));
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::prefix('ai')
+        ->name('api.ai.')
+        ->group(base_path('routes/ai.php'));
+
     Route::prefix('citizen')
         ->name('api.citizen.')
         ->group(base_path('routes/citizen.php'));

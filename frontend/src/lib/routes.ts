@@ -31,4 +31,5 @@ export const ROUTES = {
   adminSlaAlerts: "/admin/sla-alerts",
   adminNotifications: "/admin/notifications",
   adminFeedback: "/admin/feedback",
+  adminAiClassifier: "/admin/ai-classifier",
 };

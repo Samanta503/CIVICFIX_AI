@@ -89,4 +89,9 @@ class Complaint extends Model
     {
         return $this->hasOne(ComplaintFeedback::class);
     }
+
+    public function aiPrediction(): HasOne
+    {
+        return $this->hasOne(ComplaintAiPrediction::class);
+    }
 }
