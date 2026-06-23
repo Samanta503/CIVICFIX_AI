@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Complaint extends Model
 {
@@ -82,5 +83,10 @@ class Complaint extends Model
     public function slaEscalations(): HasMany
     {
         return $this->hasMany(SlaEscalation::class);
+    }
+
+    public function feedback(): HasOne
+    {
+        return $this->hasOne(ComplaintFeedback::class);
     }
 }

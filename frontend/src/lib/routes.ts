@@ -12,6 +12,7 @@ export const ROUTES = {
 
   citizenDashboard: "/citizen/dashboard",
   citizenComplaints: "/citizen/complaints",
+  citizenFeedback: "/citizen/feedback",
   createComplaint: "/citizen/complaints/create",
 
   officerDashboard: "/officer/dashboard",
@@ -29,5 +30,5 @@ export const ROUTES = {
   adminWorkload: "/admin/workload",
   adminSlaAlerts: "/admin/sla-alerts",
   adminNotifications: "/admin/notifications",
-  
+  adminFeedback: "/admin/feedback",
 };

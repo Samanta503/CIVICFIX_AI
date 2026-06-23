@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AdminCategoryController;
 use App\Http\Controllers\Api\AdminComplaintController;
 use App\Http\Controllers\Api\AdminDashboardController;
 use App\Http\Controllers\Api\AdminDepartmentController;
+use App\Http\Controllers\Api\AdminFeedbackController;
 use App\Http\Controllers\Api\AdminMetaController;
 use App\Http\Controllers\Api\AdminNotificationController;
 use App\Http\Controllers\Api\AdminOfficerController;
@@ -21,6 +22,9 @@ Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
 
     Route::get('/workload', [AdminWorkloadController::class, 'index'])
         ->name('workload.index');
+
+    Route::get('/feedback', [AdminFeedbackController::class, 'index'])
+        ->name('feedback.index');
 
     Route::get('/notifications', [AdminNotificationController::class, 'index'])
         ->name('notifications.index');
