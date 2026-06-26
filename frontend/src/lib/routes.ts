@@ -33,4 +33,5 @@ export const ROUTES = {
   adminFeedback: "/admin/feedback",
   adminAiClassifier: "/admin/ai-classifier",
   adminDuplicateDetection: "/admin/duplicate-detection",
+  adminImageAnalysis: "/admin/image-analysis",
 };

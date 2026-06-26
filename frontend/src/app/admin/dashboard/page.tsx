@@ -133,6 +133,12 @@ function AdminDashboardContent() {
            >
                AI Duplicate Detection
            </Link>
+           <Link
+             href={ROUTES.adminImageAnalysis}
+             className="rounded-xl border border-blue-200 bg-blue-50 px-5 py-3 text-sm font-bold text-blue-700 hover:bg-blue-100"
+           >
+             AI Image Analysis
+           </Link>
           </div>
         </div>
 
