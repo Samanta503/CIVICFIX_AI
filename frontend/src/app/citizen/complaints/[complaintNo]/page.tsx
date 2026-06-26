@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { AuthGuard } from "@/components/auth/AuthGuard";
+import { Container } from "@/components/common/Container";
 import { ComplaintDetailView } from "@/components/complaints/ComplaintDetailView";
+import { DuplicateNoticeCard } from "@/components/complaints/DuplicateNoticeCard";
 import { ROUTES } from "@/lib/routes";
 import { getCitizenComplaint } from "@/services/complaint.service";
 import type { Complaint } from "@/types/complaint.types";
@@ -53,12 +55,20 @@ function CitizenComplaintDetailContent() {
   }
 
   return (
-    <ComplaintDetailView
-      complaint={complaint}
-      backHref={ROUTES.citizenComplaints}
-      backLabel="Back to My Complaints"
-      panelLabel="Citizen Complaint Details"
-    />
+    <>
+      <section className="bg-slate-50 pt-8">
+        <Container>
+          <DuplicateNoticeCard complaintNo={complaint.complaint_no} />
+        </Container>
+      </section>
+
+      <ComplaintDetailView
+        complaint={complaint}
+        backHref={ROUTES.citizenComplaints}
+        backLabel="Back to My Complaints"
+        panelLabel="Citizen Complaint Details"
+      />
+    </>
   );
 }
 

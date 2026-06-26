@@ -32,4 +32,5 @@ export const ROUTES = {
   adminNotifications: "/admin/notifications",
   adminFeedback: "/admin/feedback",
   adminAiClassifier: "/admin/ai-classifier",
+  adminDuplicateDetection: "/admin/duplicate-detection",
 };

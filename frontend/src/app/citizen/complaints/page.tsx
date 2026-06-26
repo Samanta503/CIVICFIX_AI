@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { Container } from "@/components/common/Container";
+import { DuplicateNoticeCard } from "@/components/complaints/DuplicateNoticeCard";
 import { ROUTES } from "@/lib/routes";
 import { getCitizenComplaints } from "@/services/complaint.service";
 import type { Complaint } from "@/types/complaint.types";
@@ -298,6 +300,8 @@ function ComplaintCard({
               {complaint.description}
             </p>
 
+            <DuplicateNoticeCard complaintNo={complaint.complaint_no} compact />
+
             <div className="mt-5 grid gap-2.5 rounded-2xl border border-slate-100 bg-gradient-to-br from-slate-50/80 to-teal-50/20 p-4 text-sm transition-all duration-300 group-hover:border-teal-100/80 md:grid-cols-2">
               <MetaItem label="Category" value={complaint.category?.name || "N/A"} />
               <MetaItem label="Department" value={complaint.department?.name || "N/A"} />
@@ -338,8 +342,10 @@ function ComplaintCard({
           </div>
 
           <div className="flex shrink-0 flex-row gap-3 md:min-w-[160px] md:flex-col">
-            <div className="flex flex-1 items-center gap-2 overflow-hidden rounded-2xl border border-slate-100 bg-gradient-to-br from-slate-50 to-teal-50/40 p-4 transition-all duration-300 group-hover:border-teal-100 group-hover:shadow-md md:flex-col md:text-center">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-teal-50 md:mx-auto">
+            <ComplaintStatCard
+              label="Images"
+              value={complaint.media.length}
+              icon={
                 <svg
                   className="h-5 w-5 text-primary/70"
                   fill="none"
@@ -353,17 +359,24 @@ function ComplaintCard({
                     d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
                   />
                 </svg>
-              </div>
-              <div>
-                <p className="text-xs text-slate-400">Images</p>
-                <p className="text-lg font-bold leading-tight text-secondary">
-                  {complaint.media.length}
-                </p>
-              </div>
-            </div>
+              }
+            />
 
-            <div className="flex flex-1 items-center gap-2 overflow-hidden rounded-2xl border border-slate-100 bg-gradient-to-br from-slate-50 to-teal-50/40 p-4 transition-all duration-300 group-hover:border-teal-100 group-hover:shadow-md md:flex-col md:text-center">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-teal-50 md:mx-auto">
+            <ComplaintStatCard
+              label="Submitted"
+              value={
+                complaint.submitted_at
+                  ? new Date(complaint.submitted_at).toLocaleDateString(
+                      "en-US",
+                      {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      }
+                    )
+                  : "N/A"
+              }
+              icon={
                 <svg
                   className="h-5 w-5 text-primary/70"
                   fill="none"
@@ -377,25 +390,33 @@ function ComplaintCard({
                     d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
                   />
                 </svg>
-              </div>
-              <div>
-                <p className="text-xs text-slate-400">Submitted</p>
-                <p className="text-sm font-bold leading-tight text-secondary">
-                  {complaint.submitted_at
-                    ? new Date(complaint.submitted_at).toLocaleDateString(
-                        "en-US",
-                        {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        }
-                      )
-                    : "N/A"}
-                </p>
-              </div>
-            </div>
+              }
+            />
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function ComplaintStatCard({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: string | number;
+  icon: ReactNode;
+}) {
+  return (
+    <div className="flex flex-1 items-center gap-2 overflow-hidden rounded-2xl border border-slate-100 bg-gradient-to-br from-slate-50 to-teal-50/40 p-4 transition-all duration-300 group-hover:border-teal-100 group-hover:shadow-md md:flex-col md:text-center">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-teal-50 md:mx-auto">
+        {icon}
+      </div>
+
+      <div>
+        <p className="text-xs text-slate-400">{label}</p>
+        <p className="text-sm font-bold leading-tight text-secondary">{value}</p>
       </div>
     </div>
   );
@@ -445,4 +466,4 @@ function PriorityBadge({ priority }: { priority: Complaint["priority"] }) {
       {priority}
     </span>
   );
-} 
+}

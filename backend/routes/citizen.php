@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CitizenComplaintController;
+use App\Http\Controllers\Api\CitizenDuplicateNoticeController;
 use App\Http\Controllers\Api\CitizenFeedbackController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,10 +18,17 @@ Route::middleware(['auth:sanctum', 'role:citizen'])->group(function () {
                     'Track complaint status',
                     'View complaint history',
                     'Rate resolved complaints',
+                    'View duplicate complaint notices',
                 ],
             ],
         ]);
     })->name('dashboard');
+
+    Route::get('/duplicate-notices', [CitizenDuplicateNoticeController::class, 'index'])
+        ->name('duplicate-notices.index');
+
+    Route::get('/complaints/{complaintNo}/duplicate-notice', [CitizenDuplicateNoticeController::class, 'show'])
+        ->name('complaints.duplicate-notice.show');
 
     Route::get('/complaints', [CitizenComplaintController::class, 'index'])
         ->name('complaints.index');

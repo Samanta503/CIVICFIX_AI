@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { Container } from "@/components/common/Container";
+import { CitizenDuplicateNoticeSummary } from "@/components/complaints/CitizenDuplicateNoticeSummary";
 import { getAuthUser } from "@/lib/auth-storage";
 import { ROUTES } from "@/lib/routes";
 
@@ -98,15 +100,16 @@ function CitizenDashboardContent() {
                   </Link>
 
                   <Link
-                     href={ROUTES.notifications}
-                     className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-secondary hover:bg-slate-100"
-                   >
+                    href={ROUTES.notifications}
+                    className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-secondary hover:bg-slate-100"
+                  >
                     My Notifications
                   </Link>
+
                   <Link
-                     href={ROUTES.citizenFeedback}
-                     className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-secondary hover:bg-slate-100"
-                 >
+                    href={ROUTES.citizenFeedback}
+                    className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-secondary hover:bg-slate-100"
+                  >
                     Give Feedback
                   </Link>
                 </div>
@@ -217,6 +220,8 @@ function CitizenDashboardContent() {
               index={3}
             />
           </div>
+
+          <CitizenDuplicateNoticeSummary />
         </div>
       </Container>
     </section>
@@ -231,7 +236,7 @@ function FeatureCard({
 }: {
   title: string;
   description: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   index: number;
 }) {
   return (

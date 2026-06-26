@@ -94,4 +94,14 @@ class Complaint extends Model
     {
         return $this->hasOne(ComplaintAiPrediction::class);
     }
+
+    public function duplicateSuggestionsAsSource(): HasMany
+    {
+        return $this->hasMany(ComplaintDuplicateSuggestion::class, 'source_complaint_id');
+    }
+
+    public function duplicateSuggestionsAsMatch(): HasMany
+    {
+        return $this->hasMany(ComplaintDuplicateSuggestion::class, 'matched_complaint_id');
+    }
 }
