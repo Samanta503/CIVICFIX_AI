@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\AdminSlaController;
 use App\Http\Controllers\Api\AdminUserController;
 use App\Http\Controllers\Api\AdminWorkloadController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AdminDeploymentReadinessController;
 
 Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])
@@ -93,4 +94,7 @@ Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
     Route::put('/complaints/{complaint}', [AdminComplaintController::class, 'update'])
         ->middleware('throttle:40,1')
         ->name('complaints.update');
+
+    Route::get('/deployment-readiness', [AdminDeploymentReadinessController::class, 'index'])
+        ->name('deployment-readiness.index');
 });

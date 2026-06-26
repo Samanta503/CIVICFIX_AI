@@ -152,6 +152,13 @@ function AdminDashboardContent() {
             >
               AI Logs & Monitoring
             </Link>
+
+            <Link
+               href={ROUTES.adminDeploymentReadiness}
+               className="rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-3 text-sm font-bold text-emerald-700 hover:bg-emerald-100"
+             >
+               Deployment Readiness
+             </Link>
           </div>
         </div>
 

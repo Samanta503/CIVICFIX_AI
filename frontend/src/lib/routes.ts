@@ -36,4 +36,5 @@ export const ROUTES = {
   adminImageAnalysis: "/admin/image-analysis",
   adminAiInsights: "/admin/insights",
   adminAiMonitoring: "/admin/ai-monitoring",
+  adminDeploymentReadiness: "/admin/deployment-readiness",
 };
