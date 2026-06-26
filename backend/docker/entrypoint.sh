@@ -14,6 +14,10 @@ php artisan optimize:clear
 
 php artisan migrate --force
 
+if [ "${RUN_SEEDER_ON_BOOT}" = "true" ]; then
+  php artisan db:seed --force
+fi
+
 php artisan storage:link || true
 
 php artisan config:cache
