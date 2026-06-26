@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\Api\AiAdminInsightsController;
 use App\Http\Controllers\Api\AiComplaintController;
 use App\Http\Controllers\Api\AiDuplicateComplaintController;
 use App\Http\Controllers\Api\AiImageAnalysisController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/admin-insights', [AiAdminInsightsController::class, 'index'])
+        ->name('admin-insights.index');
+
     Route::get('/complaints', [AiComplaintController::class, 'index'])
         ->name('complaints.index');
 

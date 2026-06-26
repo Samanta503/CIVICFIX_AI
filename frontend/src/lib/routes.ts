@@ -34,4 +34,5 @@ export const ROUTES = {
   adminAiClassifier: "/admin/ai-classifier",
   adminDuplicateDetection: "/admin/duplicate-detection",
   adminImageAnalysis: "/admin/image-analysis",
+  adminAiInsights: "/admin/insights",
 };

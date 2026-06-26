@@ -312,3 +312,47 @@ LEFT JOIN complaints c ON c.id = f.complaint_id
 LEFT JOIN users citizen ON citizen.id = f.citizen_id
 ORDER BY f.id DESC;
 
+USE civicfix_ai;
+
+SELECT 
+    status,
+    COUNT(*) AS total
+FROM complaints
+GROUP BY status
+ORDER BY total DESC;
+
+SELECT 
+    priority,
+    COUNT(*) AS total
+FROM complaints
+GROUP BY priority
+ORDER BY total DESC;
+
+SELECT 
+    z.name AS zone_name,
+    COUNT(c.id) AS total_complaints,
+    SUM(CASE WHEN c.status NOT IN ('resolved', 'closed', 'rejected') THEN 1 ELSE 0 END) AS open_total,
+    SUM(CASE WHEN c.priority IN ('high', 'critical') THEN 1 ELSE 0 END) AS high_risk_total,
+    SUM(CASE WHEN c.sla_due_at IS NOT NULL 
+             AND c.sla_due_at < NOW()
+             AND c.status NOT IN ('resolved', 'closed', 'rejected')
+        THEN 1 ELSE 0 END) AS overdue_total
+FROM complaints c
+LEFT JOIN zones z ON z.id = c.zone_id
+GROUP BY z.id, z.name
+ORDER BY total_complaints DESC;
+
+SELECT 
+    c.id,
+    c.complaint_no,
+    c.title,
+    c.priority,
+    c.status,
+    c.latitude,
+    c.longitude,
+    z.name AS zone_name
+FROM complaints c
+LEFT JOIN zones z ON z.id = c.zone_id
+WHERE c.latitude IS NOT NULL
+AND c.longitude IS NOT NULL
+ORDER BY c.id DESC;
