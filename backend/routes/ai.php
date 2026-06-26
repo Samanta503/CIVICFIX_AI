@@ -4,9 +4,13 @@ use App\Http\Controllers\Api\AiAdminInsightsController;
 use App\Http\Controllers\Api\AiComplaintController;
 use App\Http\Controllers\Api\AiDuplicateComplaintController;
 use App\Http\Controllers\Api\AiImageAnalysisController;
+use App\Http\Controllers\Api\AiMonitoringController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/monitoring', [AiMonitoringController::class, 'index'])
+        ->name('monitoring.index');
+
     Route::get('/admin-insights', [AiAdminInsightsController::class, 'index'])
         ->name('admin-insights.index');
 

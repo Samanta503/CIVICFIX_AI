@@ -35,4 +35,5 @@ export const ROUTES = {
   adminDuplicateDetection: "/admin/duplicate-detection",
   adminImageAnalysis: "/admin/image-analysis",
   adminAiInsights: "/admin/insights",
+  adminAiMonitoring: "/admin/ai-monitoring",
 };

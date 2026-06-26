@@ -145,6 +145,13 @@ function AdminDashboardContent() {
            >
              AI Insights & Hotspot Map
            </Link>
+
+           <Link
+              href={ROUTES.adminAiMonitoring}
+              className="rounded-xl border border-rose-200 bg-rose-50 px-5 py-3 text-sm font-bold text-rose-700 hover:bg-rose-100"
+            >
+              AI Logs & Monitoring
+            </Link>
           </div>
         </div>
 
