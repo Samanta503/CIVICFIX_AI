@@ -97,7 +97,7 @@ export default function LoginPage() {
 
             <span className="relative inline-block rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold backdrop-blur-sm transition-all duration-300 hover:bg-white/20">
               <span className="mr-2 inline-block h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-              Chunk 4 Authentication
+              CivicFix AI Authentication
             </span>
 
             <h1 className="relative mt-6 text-4xl font-extrabold leading-tight tracking-tight">
@@ -140,11 +140,10 @@ export default function LoginPage() {
                       setPassword("password");
                       setActiveUser(user.email);
                     }}
-                    className={`group/btn relative overflow-hidden rounded-xl border px-4 py-3 text-left text-sm transition-all duration-300 ${
-                      activeUser === user.email
-                        ? "border-teal-400/40 bg-white/20 shadow-lg shadow-teal-400/10"
-                        : "border-transparent bg-white/[0.08] hover:border-white/20 hover:bg-white/15"
-                    }`}
+                    className={`group/btn relative overflow-hidden rounded-xl border px-4 py-3 text-left text-sm transition-all duration-300 ${activeUser === user.email
+                      ? "border-teal-400/40 bg-white/20 shadow-lg shadow-teal-400/10"
+                      : "border-transparent bg-white/[0.08] hover:border-white/20 hover:bg-white/15"
+                      }`}
                     style={{
                       animationDelay: `${index * 100}ms`,
                     }}
