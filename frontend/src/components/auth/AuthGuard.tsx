@@ -1,21 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { getAuthToken, getAuthUser } from "@/lib/auth-storage";
 import { ROUTES } from "@/lib/routes";
-import type { AuthUser, RoleSlug } from "@/types/auth.types";
+
+export type RoleSlug =
+  | "citizen"
+  | "officer"
+  | "department_admin"
+  | "super_admin";
 
 type AuthGuardProps = {
+  children: ReactNode;
   allowedRoles: RoleSlug[];
-  children: React.ReactNode;
 };
 
-export function AuthGuard({ allowedRoles, children }: AuthGuardProps) {
+export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
   const router = useRouter();
-
   const [checking, setChecking] = useState(true);
-  const [user, setUser] = useState<AuthUser | null>(null);
 
   useEffect(() => {
     const token = getAuthToken();
@@ -28,12 +31,11 @@ export function AuthGuard({ allowedRoles, children }: AuthGuardProps) {
 
     const roleSlug = storedUser.role?.slug as RoleSlug | undefined;
 
-    if (!roleSlug || !allowedRoles.includes(roleSlug as RoleSlug)) {
+    if (!roleSlug || !allowedRoles.includes(roleSlug)) {
       router.replace(ROUTES.unauthorized);
       return;
     }
 
-    setUser(storedUser);
     setChecking(false);
   }, [allowedRoles, router]);
 
@@ -43,14 +45,12 @@ export function AuthGuard({ allowedRoles, children }: AuthGuardProps) {
         <div className="text-center">
           <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-teal-200 border-t-primary" />
           <p className="mt-4 text-sm font-medium text-slate-600">
-            Checking authentication...
+            Checking access...
           </p>
         </div>
       </section>
     );
   }
-
-  if (!user) return null;
 
   return <>{children}</>;
 }
