@@ -79,6 +79,9 @@ export function setAuthData(token: string, user: StoredAuthUser) {
 export function saveAuthData(token: string, user: StoredAuthUser) {
   setAuthData(token, user);
 }
+export function saveAuth(token: string, user: StoredAuthUser) {
+  setAuthData(token, user);
+}
 
 export function setAuthToken(token: string) {
   if (typeof window === "undefined") return;

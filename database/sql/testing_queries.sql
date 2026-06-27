@@ -356,3 +356,48 @@ LEFT JOIN zones z ON z.id = c.zone_id
 WHERE c.latitude IS NOT NULL
 AND c.longitude IS NOT NULL
 ORDER BY c.id DESC;
+
+USE civicfix_ai;
+
+-- AI classifier confidence check
+SELECT 
+    p.id,
+    c.complaint_no,
+    c.title,
+    p.model_name,
+    p.predicted_priority,
+    p.confidence_score,
+    p.created_at
+FROM complaint_ai_predictions p
+LEFT JOIN complaints c ON c.id = p.complaint_id
+ORDER BY p.confidence_score ASC;
+
+-- Duplicate detection confidence/similarity check
+SELECT 
+    ds.id,
+    source.complaint_no AS source_complaint,
+    matched.complaint_no AS matched_complaint,
+    ds.model_name,
+    ds.similarity_score,
+    ds.status,
+    ds.created_at
+FROM complaint_duplicate_suggestions ds
+LEFT JOIN complaints source ON source.id = ds.source_complaint_id
+LEFT JOIN complaints matched ON matched.id = ds.matched_complaint_id
+ORDER BY ds.similarity_score ASC;
+
+-- Image analysis confidence check
+SELECT 
+    a.id,
+    c.complaint_no,
+    c.title,
+    a.model_name,
+    a.detected_issue_type,
+    a.visual_severity,
+    a.confidence_score,
+    a.quality_score,
+    a.status,
+    a.created_at
+FROM complaint_media_ai_analyses a
+LEFT JOIN complaints c ON c.id = a.complaint_id
+ORDER BY a.confidence_score ASC;

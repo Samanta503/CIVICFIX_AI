@@ -26,9 +26,9 @@ export function AuthGuard({ allowedRoles, children }: AuthGuardProps) {
       return;
     }
 
-    const roleSlug = storedUser.role?.slug;
+    const roleSlug = storedUser.role?.slug as RoleSlug | undefined;
 
-    if (!roleSlug || !allowedRoles.includes(roleSlug)) {
+    if (!roleSlug || !allowedRoles.includes(roleSlug as RoleSlug)) {
       router.replace(ROUTES.unauthorized);
       return;
     }
